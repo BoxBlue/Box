@@ -37,4 +37,4 @@ def getFunction(funcType):
     elif funcType == 0x03:
         return "Retrieve"
     else:
-        "Unknown"
+        return "Unknown"
