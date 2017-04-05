@@ -26,8 +26,10 @@ def aggregate(data, dataDict):
         lastByte = payload[len(payload) - 1]
         if lastByte == 0x0A:
             process(dataDict, id)
-    else
-        print("Incorrect magic")
+        else:
+            print("Incorrect magic")
+
+
 
 def process(dataDict,id):
     dataRep = dataDict[id]
@@ -51,3 +53,14 @@ def getFunction(funcType):
         return "Retrieve"
     else:
         return "Unknown"
+
+dataDict = {}
+data = [0xFA, 0x01, 0x02, 0x01, 0x01, 0x01, 0x0F]
+aggregate(data, dataDict)
+print(dataDict)
+data = [0xFA, 0x01, 0x02, 0x01, 0x01, 0x01, 0x0B]
+aggregate(data, dataDict)
+print(dataDict)
+data = [0xFA, 0x02, 0x02, 0x01, 0x01, 0x01, 0x0F]
+aggregate(data, dataDict)
+print(dataDict)
