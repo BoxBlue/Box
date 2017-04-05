@@ -5,18 +5,18 @@ port = 3
 backlog = 1
 size = 1024
 
-s = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-s.bind((hostMACAddress, port))
-s.listen(backlog)
+server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+server_socket.bind((hostMACAddress,port))
+server_socket.listen(backlog)
 
 try:
-    client, clientInfo = s.accept()
+    client, clientInfo = server_socket.accept()
     while 1:
         data = client.recv(size)
         if data:
             print(data)
-            client.send(data) # Echo back to client
+            client.send(data) # Echo back to client.
 except:	
     print("Closing socket")
     client.close()
-    s.close()
+    server_socket.close()
