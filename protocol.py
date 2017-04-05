@@ -9,9 +9,11 @@ def aggregate(data, dataDict):
         sequence = data[4]
         payloadLength = data[5]
         payload = []
-        for x in range(0,payloadLength):
+        print(str(payloadLength))
+        for x in range(6,payloadLength + 6):
             payload.append(data[x])
-        dataRep = dataDict[id]
+        print("payload %s", payload)
+        dataRep = dataDict.get(id)
         if dataRep is None:
             payloads = []
             payloads.insert(sequence, payload)
@@ -21,7 +23,7 @@ def aggregate(data, dataDict):
             payloads.insert(sequence, payload)
             dataRep['payloads'] = payloads
         dataDict[id] = dataRep
-        lastByte = payload[payloadLength - 1]
+        lastByte = payload[len(payload) - 1]
         if lastByte == 0x0A:
             process(dataDict, id)
 
@@ -47,3 +49,10 @@ def getFunction(funcType):
         return "Retrieve"
     else:
         return "Unknown"
+
+data = [0xFA,0X00,0x00,0x00,0x01,0x01,0x0A]
+dataDict = {}
+aggregate(data, dataDict)
+data = [0xFA,0X00,0x00,0x00,0x01,0x01,0x0B]
+aggregate(data, dataDict)
+print(dataDict)
