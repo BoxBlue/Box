@@ -21,6 +21,15 @@ def aggregate(data, dataDict):
             payloads.insert(sequence, payload)
             dataRep['payloads'] = payloads
         dataDict[id] = dataRep
+        lastByte = payload[payloadLength - 1]
+        if lastByte == 0x0A:
+            process(dataDict, id)
+
+def process(dataDict,id):
+    dataRep = dataDict[id]
+    #TODO: process data based on function
+    return True
+
 
 def validateMagic(magic):
     if magic == 0xFA:
