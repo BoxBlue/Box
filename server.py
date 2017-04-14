@@ -1,20 +1,28 @@
-import bluetooth
+from bluetooth import *
+
 import protocol
 
-hostMACAddress = 'B8:27:EB:9B:8B:74' # The MAC address of a Bluetooth adapter on the Raspberry Pi found using "sudo hciconfig" on RPi.
-port = 3
+
 backlog = 1
 size = 1024
 
-server_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
-server_socket.bind((hostMACAddress,port))
+server_socket = BluetoothSocket(RFCOMM)
+server_socket.bind(("",PORT_ANY))
 server_socket.listen(backlog)
 print("listening")
 dataDict = {}
+uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
+
+advertise_service(server_socket, "BoxBlue",
+                            service_id = uuid,
+                            service_classes = [ uuid, SERIAL_PORT_CLASS ],
+                            profiles = [ SERIAL_PORT_PROFILE ]
+)
 
 try:
+    print("waiting to accept")
     client, clientInfo = server_socket.accept()
-    print("accepting")
+    print("accepting from %s",clientInfo)
     while 1:
         print("receiving")
         data = client.recv(size)
@@ -23,10 +31,7 @@ try:
         elif data is not None:
             protocol.aggregate(data, dataDict)
             print(data)
-            client.send(data) # Echo back to client.
-        
-        
+            client.send(data) # Echo back to client.        
 except:
     print("Closing socket")
-    client.close()
     server_socket.close()
