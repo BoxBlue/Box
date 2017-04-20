@@ -1,6 +1,8 @@
-
+import binarysearch
+import struct
 
 def aggregate(data, dataDict):
+    data = bytearray(data)
     magic = data[0]
     if validateMagic(magic):
         id = data[1]
@@ -24,16 +26,39 @@ def aggregate(data, dataDict):
             dataRep['payloads'] = payloads
         dataDict[id] = dataRep
         lastByte = payload[len(payload) - 1]
-        if lastByte == 0x0A:
-            process(dataDict, id)
+        if len(payload) < 255:
+            return process(dataDict, id)
     else:
-        print("Incorrect Magic")
+        return "Incorrect Magic"
 
 def process(dataDict,id):
     dataRep = dataDict[id]
-    #TODO: process data based on function
-    return True
-
+    payloads = dataRep['payloads']
+    flat = []
+    for payload in payloads:
+        for x in range(0,len(payload)):
+            flat.append(payload[x])
+    print("break 1")
+    print(flat)
+    payloads = bytearray(flat)
+    print("break 2")
+    payloadsAsStr = str(payloads)
+    print("break 3")
+    print("payloadsAsStr = " + repr(payloadsAsStr))
+    payloadsAsInt = []
+    chunk = []
+    print("break 4")
+    for x in range(0,len(payloadsAsStr)):
+        if x is not 0 and x % 4 == 0:
+            print("chunk length = " + str(len(chunk)))
+            chunk = ''.join(chunk)
+            payloadsAsInt.append(struct.unpack(">i",chunk)[0])
+            chunk = []
+        chunk.append(payloadsAsStr[x])
+    target = payloadsAsInt[0]
+    vals = payloadsAsInt[1:len(payloadsAsInt)]
+    res = binarysearch.print_binary_search(vals,target)
+    return res
 
 def validateMagic(magic):
     if magic == 0xFA:

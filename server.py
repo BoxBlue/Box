@@ -29,9 +29,11 @@ try:
         if data is None:
             print("no data")
         elif data is not None:
-            protocol.aggregate(data, dataDict)
-            print(data)
-            client.send(data) # Echo back to client.        
-except:
-    print("Closing socket")
+            #protocol.aggregate(data, dataDict)
+            retVal = protocol.aggregate(data, dataDict)
+            if retVal is not None:
+                print("responding with " + retVal)
+                client.send(retVal) # Echo back to client.        
+except Exception as err:
+    print("Closing socket:",err)
     server_socket.close()

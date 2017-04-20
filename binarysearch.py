@@ -3,22 +3,24 @@ def binary_search(arr,value):
     right = len(arr) - 1
     while(left <= right):
         mid = (left + right) // 2
-        print(mid)
-        if arr[mid] is value:
+        print("mid = " + str(mid) + " and target is " + str(value) + "and curr is " + str(arr[mid]))
+        curr = int(arr[mid])
+        if curr is value:
             return mid
-        elif value < arr[mid]:
+        elif value < curr:
+            print("value is less")
             right = mid - 1
-        elif value > arr[mid]:
+        elif value > curr:
+            print("value is greater")
             left = mid + 1
-
     return -1
 
 def print_binary_search(arr,value):
     pos = binary_search(arr,value)
     if pos is -1:
-        print("Element not found")
+        return "Element not found"
     else:
-        print("Element found in the positon " +str(pos))
+        return "Element found in the positon " +str(pos)
 
 
 
