@@ -1,5 +1,6 @@
 import binarysearch
 import struct
+from PIL import Image
 
 def aggregate(data, dataDict):
     data = bytearray(data)
@@ -34,31 +35,49 @@ def aggregate(data, dataDict):
 def process(dataDict,id):
     dataRep = dataDict[id]
     payloads = dataRep['payloads']
-    flat = []
-    for payload in payloads:
-        for x in range(0,len(payload)):
-            flat.append(payload[x])
-    print("break 1")
-    print(flat)
-    payloads = bytearray(flat)
-    print("break 2")
-    payloadsAsStr = str(payloads)
-    print("break 3")
-    print("payloadsAsStr = " + repr(payloadsAsStr))
-    payloadsAsInt = []
-    chunk = []
-    print("break 4")
-    for x in range(0,len(payloadsAsStr)):
-        if x is not 0 and x % 4 == 0:
-            print("chunk length = " + str(len(chunk)))
-            chunk = ''.join(chunk)
-            payloadsAsInt.append(struct.unpack(">i",chunk)[0])
-            chunk = []
-        chunk.append(payloadsAsStr[x])
-    target = payloadsAsInt[0]
-    vals = payloadsAsInt[1:len(payloadsAsInt)]
-    res = binarysearch.print_binary_search(vals,target)
-    return res
+    function = dataRep['function']
+    if function == 'Search':
+        flat = []
+        for payload in payloads:
+            for x in range(0,len(payload)):
+                flat.append(payload[x])
+        print("break 1")
+        print(flat)
+        payloads = bytearray(flat)
+        print("break 2")
+        payloadsAsStr = str(payloads)
+        print("break 3")
+        print("payloadsAsStr = " + repr(payloadsAsStr))
+        payloadsAsInt = []
+        chunk = []
+        print("break 4")
+        for x in range(0,len(payloadsAsStr)):
+            if x is not 0 and x % 4 == 0:
+                print("chunk length = " + str(len(chunk)))
+                chunk = ''.join(chunk)
+                payloadsAsInt.append(struct.unpack(">i",chunk)[0])
+                chunk = []
+            chunk.append(payloadsAsStr[x])
+        target = payloadsAsInt[0]
+        vals = payloadsAsInt[1:len(payloadsAsInt)]
+        res = binarysearch.print_binary_search(vals,target)
+        return res
+    elif function == 'Store':
+        flat = []
+        for payload in payloads:
+            payload = bytearray(payload)
+            for p in payload:
+                flat.append(p)
+        #flat is now one big array of all the bytes in image
+        image = Image.open(io.BytesIO(flat))
+        savepath = str(id) + "image.jpg"
+        res = ""
+        try:
+            image.save(savepath,"JPEG", quality=85, optimize=True)
+            res = "Image saved"
+        except Exception as err:
+            res = "Couldn't save image because: " + str(err)
+        return res
 
 def validateMagic(magic):
     if magic == 0xFA:
