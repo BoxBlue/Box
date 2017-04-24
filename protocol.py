@@ -70,7 +70,7 @@ def process(dataDict,id):
                 flat.append(p)
         #flat is now one big array of all the bytes in image
         image = Image.open(io.BytesIO(flat))
-        savepath = str(id) + "image.jpg"
+        savepath = "~/" + str(id) + "image.jpg"
         res = ""
         try:
             image.save(savepath,"JPEG", quality=85, optimize=True)
