@@ -2,7 +2,6 @@ from bluetooth import *
 
 import protocol
 
-
 backlog = 1
 size = 1024
 

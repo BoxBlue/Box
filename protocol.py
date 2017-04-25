@@ -1,6 +1,8 @@
 import binarysearch
 import struct
 from PIL import Image
+import io
+import binascii
 
 def aggregate(data, dataDict):
     data = bytearray(data)
@@ -69,7 +71,8 @@ def process(dataDict,id):
             for p in payload:
                 flat.append(p)
         #flat is now one big array of all the bytes in image
-        image = Image.open(io.BytesIO(flat))
+        r_data = bytes(flat)
+        image = Image.open(io.BytesIO(r_data))
         savepath = "~/" + str(id) + "image.jpg"
         res = ""
         try:
