@@ -32,8 +32,10 @@ def runServer():
             #protocol.aggregate(data, dataDict)
                 retVal = protocol.aggregate(data, dataDict)
                 if retVal is not None:
-                    print("responding with " + retVal)
-                    client.send(retVal) # Echo back to client.        
+                    print("responding with " + str(retVal))
+                    client.send(str(retVal)) # Echo back to client.
+                else:
+                    print("No retval")
     except Exception as err:
         print("Closing socket:",err)
         server_socket.close()

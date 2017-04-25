@@ -81,6 +81,14 @@ def process(dataDict,id):
         except Exception as err:
             res = "Couldn't save image because: " + str(err)
         return res
+    elif function == 'Sort':
+        flat = []
+        for payload in payloads:
+            payload = bytearray(payload)
+            for p in payload:
+                flat.append(p)
+        flat.sort()
+        return flat
 
 def validateMagic(magic):
     if magic == 0xFA:
