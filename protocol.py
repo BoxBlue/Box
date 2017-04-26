@@ -73,10 +73,10 @@ def process(dataDict,id):
         #flat is now one big array of all the bytes in image
         r_data = bytes(flat)
         image = Image.open(io.BytesIO(r_data))
-        savepath = "~/" + str(id) + "image.jpg"
+        savepath = "~/" + str(id) + "image.bmp"
         res = ""
         try:
-            image.save(savepath,"JPEG", quality=85, optimize=True)
+            image.save(savepath)
             res = "Image saved"
         except Exception as err:
             res = "Couldn't save image because: " + str(err)
